@@ -1,0 +1,7 @@
+name: garnet-math
+description: Garnet engine vector and matrix math constructs
+version: 1.0.0
+crystal: 0.30.0
+license: MIT
+authors:
+  - Stephen Belanger <admin@stephenbelanger.com>
