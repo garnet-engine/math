@@ -1,7 +1,7 @@
-abstract struct Garnet::Math::Matrix(T, R, C)
+abstract struct Garnet::Math::Matrix(T, C)
   include Indexable(T)
 
-  @buffer : T*
+  @buffer : StaticArray(T, C)
 
   macro matrix_property(name, index)
     def {{name.id}}
@@ -34,11 +34,12 @@ abstract struct Garnet::Math::Matrix(T, R, C)
   end
 
   def initialize
-    @buffer = Pointer(T).malloc(size)
+    @buffer = StaticArray(T, C).new(0)
   end
 
   def initialize(&block : Int32 -> T)
-    @buffer = Pointer(T).malloc(size, &block)
+    initialize
+    update!(&block)
   end
 
   def update!(&block : Int32 -> T)
@@ -61,11 +62,11 @@ abstract struct Garnet::Math::Matrix(T, R, C)
   end
 
   def row_size
-    R
+    C
   end
 
   def column_size
-    C
+    C / row_size
   end
 
   def unsafe_fetch(i)
@@ -103,23 +104,27 @@ abstract struct Garnet::Math::Matrix(T, R, C)
   def inspect(io)
     io << String.build do |sb|
       # Print first line
-      0.upto(C - 1) { |c| sb << "+------------" }
+      0.upto(column_size - 1) { |c| sb << "+------------" }
       sb << "+\n"
 
-      0.upto(R - 1) do |r|
-        0.upto(C - 1) do |c|
+      0.upto(row_size - 1) do |r|
+        0.upto(column_size - 1) do |c|
           sb << sprintf("| %10.3f ", self[r, c].to_f64)
         end
         sb << "|\n"
 
-        0.upto(C - 1) { |c| sb << "+------------" }
+        0.upto(column_size - 1) { |c| sb << "+------------" }
         sb << "+\n"
       end
     end
   end
 end
 
-abstract struct Garnet::Math::SquareMatrix(T, S) < Garnet::Math::Matrix(T, S, S)
+abstract struct Garnet::Math::SquareMatrix(T, C) < Garnet::Math::Matrix(T, C)
+  def column_size
+    row_size
+  end
+
   def self.identity
     zero.identity!
   end

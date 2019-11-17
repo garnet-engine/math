@@ -41,7 +41,7 @@ describe Rect do
   end
 
   describe "#grow" do
-    it "grows properly" do
+    it "grows by f32 size" do
       origin_x = 100f32
       origin_y = 200f32
       origin = Point.new(origin_x, origin_y)
@@ -57,10 +57,8 @@ describe Rect do
       rect.top.should eq(601)
       rect.bottom.should eq(199)
     end
-  end
 
-  describe "#grow_y" do
-    it "grows Y, but keeps left/right unchanged" do
+    it "grows by f32 width and height" do
       origin_x = 100f32
       origin_y = 200f32
       origin = Point.new(origin_x, origin_y)
@@ -69,12 +67,30 @@ describe Rect do
       size = Size.new(width, height)
       rect = Rect.new(origin, size)
 
-      rect = rect.grow_y(1f32)
+      rect = rect.grow(1f32, 2f32)
 
-      rect.left.should eq(100)
-      rect.right.should eq(400)
-      rect.top.should eq(601)
-      rect.bottom.should eq(199)
+      rect.left.should eq(99)
+      rect.right.should eq(401)
+      rect.top.should eq(602)
+      rect.bottom.should eq(198)
+    end
+
+    it "grows by size instance" do
+      origin_x = 100f32
+      origin_y = 200f32
+      origin = Point.new(origin_x, origin_y)
+      width = 300f32
+      height = 400f32
+      size = Size.new(width, height)
+      rect = Rect.new(origin, size)
+
+      grow_by = Size.new(1f32, 2f32)
+      rect = rect.grow(grow_by)
+
+      rect.left.should eq(99)
+      rect.right.should eq(401)
+      rect.top.should eq(602)
+      rect.bottom.should eq(198)
     end
   end
 
@@ -130,6 +146,34 @@ describe Rect do
     end
   end
 
-  # TODO: overlaps_with?
-  # TODO: overlaps_on_bottom_with?
+  describe "#intersects?(other : Rect)" do
+    it "is intersecting" do
+      rect = Rect.new(100f32, 200f32, 300f32, 400f32)
+
+      rect.intersects?(Rect.new(rect.x - 1f32, rect.y + 1f32, rect.width, rect.height)).should eq(true)
+      rect.intersects?(Rect.new(rect.x + 1f32, rect.y + 1f32, rect.width, rect.height)).should eq(true)
+      rect.intersects?(Rect.new(rect.x + 1f32, rect.y - 1f32, rect.width, rect.height)).should eq(true)
+      rect.intersects?(Rect.new(rect.x - 1f32, rect.y - 1f32, rect.width, rect.height)).should eq(true)
+    end
+
+    it "is not intersecting" do
+      rect = Rect.new(100f32, 200f32, 300f32, 400f32)
+
+      rect.intersects?(Rect.new(rect.x - rect.width, rect.y + rect.height, rect.width, rect.height)).should eq(false)
+      rect.intersects?(Rect.new(rect.x + rect.width, rect.y + rect.height, rect.width, rect.height)).should eq(false)
+      rect.intersects?(Rect.new(rect.x + rect.width, rect.y - rect.height, rect.width, rect.height)).should eq(false)
+      rect.intersects?(Rect.new(rect.x - rect.width, rect.y - rect.height, rect.width, rect.height)).should eq(false)
+    end
+  end
+
+  describe "#inspect(io)" do
+    it "inspects" do
+      origin_x = 100f32
+      origin_y = 200f32
+      width = 300f32
+      height = 400f32
+      rect = Rect.new(origin_x, origin_y, width, height)
+      rect.inspect.should eq("Rect(origin = Point(x = 100.0, y = 200.0), size = Size(width = 300.0, height = 400.0))")
+    end
+  end
 end

@@ -1,33 +1,19 @@
-struct Garnet::Math::Mat4 < Garnet::Math::SquareMatrix(Float32, 4)
+struct Garnet::Math::Mat4 < Garnet::Math::SquareMatrix(Float32, 16)
+  def row_size
+    4
+  end
+
   def *(other : self)
     res = self.class.identity
 
-    mult = ->(res : Mat4, a : Mat4, b : Mat4, row : Int32, col : Int32) do
-      a[row, 0] * b[0, col] +
-      a[row, 1] * b[1, col] +
-      a[row, 2] * b[2, col] +
-      a[row, 3] * b[3, col]
+    (0..3).each do |row|
+      (0..3).each do |col|
+        res[row, col] = self[row, 0] * other[0, col] +
+          self[row, 1] * other[1, col] +
+          self[row, 2] * other[2, col] +
+          self[row, 3] * other[3, col]
+      end
     end
-
-    res[0, 0] = mult.call(res, self, other, 0, 0)
-    res[0, 1] = mult.call(res, self, other, 0, 1)
-    res[0, 2] = mult.call(res, self, other, 0, 2)
-    res[0, 3] = mult.call(res, self, other, 0, 3)
-
-    res[1, 0] = mult.call(res, self, other, 1, 0)
-    res[1, 1] = mult.call(res, self, other, 1, 1)
-    res[1, 2] = mult.call(res, self, other, 1, 2)
-    res[1, 3] = mult.call(res, self, other, 1, 3)
-
-    res[2, 0] = mult.call(res, self, other, 2, 0)
-    res[2, 1] = mult.call(res, self, other, 2, 1)
-    res[2, 2] = mult.call(res, self, other, 2, 2)
-    res[2, 3] = mult.call(res, self, other, 2, 3)
-
-    res[3, 0] = mult.call(res, self, other, 3, 0)
-    res[3, 1] = mult.call(res, self, other, 3, 1)
-    res[3, 2] = mult.call(res, self, other, 3, 2)
-    res[3, 3] = mult.call(res, self, other, 3, 3)
 
     res
   end

@@ -1,4 +1,4 @@
-struct Garnet::Math::Rect < Garnet::Math::Matrix(Float32, 2, 2)
+struct Garnet::Math::Rect < Garnet::Math::Matrix(Float32, 4)
   matrix_properties [:x, :y, :width, :height]
 
   def self.new(x : Float32, y : Float32, width : Float32, height : Float32)
@@ -11,12 +11,7 @@ struct Garnet::Math::Rect < Garnet::Math::Matrix(Float32, 2, 2)
   end
 
   def self.new(origin : Point, size : Size)
-    vector = new
-    vector.x = origin.x
-    vector.y = origin.y
-    vector.width = size.width
-    vector.height = size.height
-    vector
+    new origin.x, origin.y, size.width, size.height
   end
 
   def to_origin
@@ -34,21 +29,24 @@ struct Garnet::Math::Rect < Garnet::Math::Matrix(Float32, 2, 2)
       point.y <= y + height
   end
 
-  def contains?(rect : Rect)
+  def contains?(rect : self)
     contains?(rect.to_origin) && contains?(rect.to_origin + rect.to_size)
   end
 
-  def grow(size : Float32)
-    Rect.new(
-      Point.new(x - size, y - size),
-      Size.new(width + 2 * size, height + 2 * size),
-    )
+  def grow(size : Size)
+    grow size.width, size.height
   end
 
-  def grow_y(size : Float32)
-    Rect.new(
-      Point.new(x, y - size),
-      Size.new(width, height + 2 * size),
+  def grow(size : Float32)
+    grow size, size
+  end
+
+  def grow(grow_width : Float32, grow_height : Float32)
+    self.class.new(
+      x - grow_width,
+      y - grow_height,
+      width + 2 * grow_width,
+      height + 2 * grow_height
     )
   end
 
@@ -68,21 +66,14 @@ struct Garnet::Math::Rect < Garnet::Math::Matrix(Float32, 2, 2)
     y + height
   end
 
-  def overlaps_with?(other : self)
+  def intersects?(other : self)
     left < other.right &&
       right > other.left &&
       bottom < other.top &&
       top > other.bottom
   end
 
-  def overlaps_on_bottom_with?(other : self)
-    left < other.right &&
-      right > other.left &&
-      bottom < other.top &&
-      bottom > other.bottom
-  end
-
   def inspect(io)
-    io << "Rect(origin = " << origin << ", size = " << size << ")"
+    io << "Rect(origin = " << to_origin << ", size = " << to_size << ")"
   end
 end

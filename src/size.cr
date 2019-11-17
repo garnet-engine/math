@@ -1,4 +1,4 @@
-struct Garnet::Math::Size < Garnet::Math::Matrix(Float32, 2, 1)
+struct Garnet::Math::Size < Garnet::Math::Matrix(Float32, 2)
   matrix_properties [:width, :height]
 
   def self.new(width : Float32, height : Float32)
@@ -14,10 +14,6 @@ struct Garnet::Math::Size < Garnet::Math::Matrix(Float32, 2, 1)
 
   def -(other : self)
     self.class.new(width - other.width, height - other.height)
-  end
-
-  def ==(other : self)
-    width == other.width && height == other.height
   end
 
   def inspect(io)

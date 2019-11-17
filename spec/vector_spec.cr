@@ -10,6 +10,7 @@ describe Vector do
       other_vector = Vector.new(10f32, 20f32)
 
       res = vector + other_vector
+      res.should be_a(Vector)
       res.dx.should eq(110)
       res.dy.should eq(220)
     end
@@ -21,6 +22,7 @@ describe Vector do
       other_vector = Vector.new(10f32, 20f32)
 
       res = vector - other_vector
+      res.should be_a(Vector)
       res.dx.should eq(90)
       res.dy.should eq(180)
     end
@@ -31,6 +33,7 @@ describe Vector do
       vector = Vector.new(100f32, 200f32)
 
       res = -vector
+      res.should be_a(Vector)
       res.dx.should eq(-100)
       res.dy.should eq(-200)
     end
@@ -41,16 +44,18 @@ describe Vector do
       vector = Vector.new(100f32, 200f32)
 
       res = vector * 0.1
+      res.should be_a(Vector)
       res.dx.should eq(10)
       res.dy.should eq(20)
     end
   end
 
-  describe "#*(other : Float32)" do
+  describe "#/(other : Float32)" do
     it "divides" do
       vector = Vector.new(100f32, 200f32)
 
       res = vector / 10
+      res.should be_a(Vector)
       res.dx.should eq(10)
       res.dy.should eq(20)
     end

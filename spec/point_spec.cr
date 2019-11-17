@@ -52,6 +52,29 @@ describe Point do
     end
   end
 
+  describe "#-(other : Size)" do
+    it "subtracts" do
+      point = Point.new(100f32, 200f32)
+      size = Size.new(10f32, 20f32)
+
+      res = point - size
+      res.should be_a(Point)
+      res.x.should eq(90)
+      res.y.should eq(180)
+    end
+  end
+
+  describe "#-" do
+    it "negates" do
+      point = Point.new(100f32, 200f32)
+
+      res = -point
+      res.should be_a(Point)
+      res.x.should eq(-100)
+      res.y.should eq(-200)
+    end
+  end
+
   describe "#==(other : self)" do
     it "compares" do
       point = Point.new(100f32, 200f32)

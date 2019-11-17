@@ -10,6 +10,7 @@ describe Size do
       other_size = Size.new(10f32, 20f32)
 
       res = size + other_size
+      res.should be_a(Size)
       res.width.should eq(110)
       res.height.should eq(220)
     end
@@ -21,8 +22,20 @@ describe Size do
       other_size = Size.new(10f32, 20f32)
 
       res = size - other_size
+      res.should be_a(Size)
       res.width.should eq(90)
       res.height.should eq(180)
+    end
+  end
+
+  describe "#-" do
+    it "negates" do
+      size = Size.new(100f32, 200f32)
+
+      res = -size
+      res.should be_a(Size)
+      res.width.should eq(-100)
+      res.height.should eq(-200)
     end
   end
 
