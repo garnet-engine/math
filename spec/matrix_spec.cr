@@ -1,11 +1,22 @@
 require "spec"
-require "../src/garnet-math"
+require "../src/garnet-math/matrix"
 
 include Garnet::Math
 
-struct TestMatrix < Garnet::Math::SquareMatrix(Float32, 16)
+struct TestMatrix
+  include Matrix(Float32)
+
+  fields :a1, :a2, :a3, :a4,
+         :b1, :b2, :b3, :b4,
+         :c1, :c2, :c3, :c4,
+         :d1, :d2, :d3, :d4
+
   def row_size
-    4
+    ::Math.sqrt(size).to_i
+  end
+
+  def column_size
+    ::Math.sqrt(size).to_i
   end
 end
 
@@ -21,7 +32,7 @@ def is_ones(matrix)
   end
 end
 
-describe SquareMatrix do
+describe Matrix do
   context "constructors" do
     describe ".zero" do
       it "is all zeroes" do
@@ -99,10 +110,10 @@ describe SquareMatrix do
     describe "#[]=(index, value)" do
       it "should update element by index" do
         matrix = TestMatrix.zero
-        matrix[0] = 1
-        matrix[5] = 1
-        matrix[10] = 1
-        matrix[15] = 1
+        matrix[0] = 1f32
+        matrix[5] = 1f32
+        matrix[10] = 1f32
+        matrix[15] = 1f32
 
         is_identity(matrix)
       end
@@ -111,10 +122,10 @@ describe SquareMatrix do
     describe "#[]=(row, column, value)" do
       it "should update element by coordinates" do
         matrix = TestMatrix.zero
-        matrix[0, 0] = 1
-        matrix[1, 1] = 1
-        matrix[2, 2] = 1
-        matrix[3, 3] = 1
+        matrix[0, 0] = 1f32
+        matrix[1, 1] = 1f32
+        matrix[2, 2] = 1f32
+        matrix[3, 3] = 1f32
 
         is_identity(matrix)
       end
@@ -156,17 +167,9 @@ describe SquareMatrix do
     describe "#inspect" do
       it "should produce a table string" do
         ones = TestMatrix.one
-        ones.inspect.strip.should eq(%{
-          +------------+------------+------------+------------+
-          |      1.000 |      1.000 |      1.000 |      1.000 |
-          +------------+------------+------------+------------+
-          |      1.000 |      1.000 |      1.000 |      1.000 |
-          +------------+------------+------------+------------+
-          |      1.000 |      1.000 |      1.000 |      1.000 |
-          +------------+------------+------------+------------+
-          |      1.000 |      1.000 |      1.000 |      1.000 |
-          +------------+------------+------------+------------+
-      }.lines.map(&.strip).join('\n').strip)
+        ones.inspect.should eq(
+          "TestMatrix(a1: 1.0, a2: 1.0, a3: 1.0, a4: 1.0, b1: 1.0, b2: 1.0, b3: 1.0, b4: 1.0, c1: 1.0, c2: 1.0, c3: 1.0, c4: 1.0, d1: 1.0, d2: 1.0, d3: 1.0, d4: 1.0)"
+        )
       end
     end
   end

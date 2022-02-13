@@ -1,5 +1,5 @@
 require "spec"
-require "../src/garnet-math"
+require "../src/garnet-math/size"
 
 include Garnet::Math
 
@@ -55,7 +55,7 @@ describe Size do
   describe "#inspect(io)" do
     it "inspects" do
       size = Size.new(100f32, 200f32)
-      size.inspect.should eq("Size(width = 100.0, height = 200.0)")
+      size.inspect.should eq("Garnet::Math::Size(width: 100.0, height: 200.0)")
     end
   end
 end

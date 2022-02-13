@@ -1,5 +1,11 @@
-struct Garnet::Math::Rect < Garnet::Math::Matrix(Float32, 4)
-  matrix_properties [:x, :y, :width, :height]
+require "./matrix"
+require "./point"
+require "./size"
+
+struct Garnet::Math::Rect
+  include Garnet::Math::Matrix(Float32)
+  
+  fields :x, :y, :width, :height
 
   def self.new(x : Float32, y : Float32, width : Float32, height : Float32)
     vector = new
@@ -10,15 +16,15 @@ struct Garnet::Math::Rect < Garnet::Math::Matrix(Float32, 4)
     vector
   end
 
-  def self.new(origin : Point, size : Size)
-    new origin.x, origin.y, size.width, size.height
+  def self.new(origin : Point, dimensions : Size)
+    new origin.x, origin.y, dimensions.width, dimensions.height
   end
 
-  def to_origin
+  def origin
     Point.new(x, y)
   end
 
-  def to_size
+  def dimensions
     Size.new(width, height)
   end
 
@@ -30,11 +36,11 @@ struct Garnet::Math::Rect < Garnet::Math::Matrix(Float32, 4)
   end
 
   def contains?(rect : self)
-    contains?(rect.to_origin) && contains?(rect.to_origin + rect.to_size)
+    contains?(rect.origin) && contains?(rect.origin + rect.dimensions)
   end
 
-  def grow(size : Size)
-    grow size.width, size.height
+  def grow(dimensions : Size)
+    grow dimensions.width, dimensions.height
   end
 
   def grow(size : Float32)
@@ -74,6 +80,9 @@ struct Garnet::Math::Rect < Garnet::Math::Matrix(Float32, 4)
   end
 
   def inspect(io)
-    io << "Rect(origin = " << to_origin << ", size = " << to_size << ")"
+    io << self.class.name << '('
+    io << "origin: " << origin
+    io << ", size: " << dimensions
+    io << ')'
   end
 end

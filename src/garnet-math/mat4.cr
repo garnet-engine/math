@@ -1,6 +1,21 @@
-struct Garnet::Math::Mat4 < Garnet::Math::SquareMatrix(Float32, 16)
+require "./matrix"
+require "./vector"
+require "./size"
+
+struct Garnet::Math::Mat4
+  include Garnet::Math::Matrix(Float32)
+  
+  fields :a1, :a2, :a3, :a4,
+         :b1, :b2, :b3, :b4,
+         :c1, :c2, :c3, :c4,
+         :d1, :d2, :d3, :d4
+
   def row_size
-    4
+    ::Math.sqrt(size).to_i
+  end
+
+  def column_size
+    ::Math.sqrt(size).to_i
   end
 
   def *(other : self)

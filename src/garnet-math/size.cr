@@ -1,5 +1,9 @@
-struct Garnet::Math::Size < Garnet::Math::Matrix(Float32, 2)
-  matrix_properties [:width, :height]
+require "./matrix"
+
+struct Garnet::Math::Size
+  include Garnet::Math::Matrix(Float32)
+  
+  fields :width, :height
 
   def self.new(width : Float32, height : Float32)
     vector = new
@@ -8,15 +12,11 @@ struct Garnet::Math::Size < Garnet::Math::Matrix(Float32, 2)
     vector
   end
 
-  def +(other : self)
+  def +(other : Size)
     self.class.new(width + other.width, height + other.height)
   end
 
-  def -(other : self)
+  def -(other : Size)
     self.class.new(width - other.width, height - other.height)
-  end
-
-  def inspect(io)
-    io << "Size(width = " << width << ", height = " << height << ")"
   end
 end

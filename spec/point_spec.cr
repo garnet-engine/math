@@ -1,5 +1,5 @@
 require "spec"
-require "../src/garnet-math"
+require "../src/garnet-math/point"
 
 include Garnet::Math
 
@@ -7,7 +7,7 @@ describe Point do
   describe "#+(other : Vector)" do
     it "adds" do
       point = Point.new(100f32, 200f32)
-      vector = Vector.new(10f32, 20f32)
+      vector = Vector2D.new(10f32, 20f32)
 
       res = point + vector
       res.should be_a(Point)
@@ -34,7 +34,7 @@ describe Point do
       other_point = Point.new(10f32, 20f32)
 
       res = point - other_point
-      res.should be_a(Vector)
+      res.should be_a(Vector2D)
       res.dx.should eq(90)
       res.dy.should eq(180)
     end
@@ -43,7 +43,7 @@ describe Point do
   describe "#-(other : Vector)" do
     it "subtracts" do
       point = Point.new(100f32, 200f32)
-      vector = Vector.new(10f32, 20f32)
+      vector = Vector2D.new(10f32, 20f32)
 
       res = point - vector
       res.should be_a(Point)
@@ -79,7 +79,7 @@ describe Point do
     it "compares" do
       point = Point.new(100f32, 200f32)
       same = Point.new(100f32, 200f32)
-      different = Vector.new(1f32, 2f32)
+      different = Vector2D.new(1f32, 2f32)
 
       (point == same).should eq(true)
       (point != same).should eq(false)
@@ -91,7 +91,7 @@ describe Point do
   describe "#inspect(io)" do
     it "inspects" do
       vector = Point.new(100f32, 200f32)
-      vector.inspect.should eq("Point(x = 100.0, y = 200.0)")
+      vector.inspect.should eq("Garnet::Math::Point(x: 100.0, y: 200.0)")
     end
   end
 end

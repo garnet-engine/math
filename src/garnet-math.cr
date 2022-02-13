@@ -1,6 +1,1 @@
-require "./matrix"
-require "./mat4"
-require "./point"
-require "./rect"
-require "./size"
-require "./vector"
+require "./garnet-math/**"

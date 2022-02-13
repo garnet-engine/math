@@ -1,5 +1,5 @@
 require "spec"
-require "../src/garnet-math"
+require "../src/garnet-math/rect"
 
 include Garnet::Math
 
@@ -173,7 +173,7 @@ describe Rect do
       width = 300f32
       height = 400f32
       rect = Rect.new(origin_x, origin_y, width, height)
-      rect.inspect.should eq("Rect(origin = Point(x = 100.0, y = 200.0), size = Size(width = 300.0, height = 400.0))")
+      rect.inspect.should eq("Garnet::Math::Rect(origin: Garnet::Math::Point(x: 100.0, y: 200.0), size: Garnet::Math::Size(width: 300.0, height: 400.0))")
     end
   end
 end
